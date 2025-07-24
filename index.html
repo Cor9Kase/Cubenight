@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cube World Prototype - Dynamiske Interaksjoner</title>
+    
+    <!-- Lenke til eksternt skriftstilsark -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    
+    <!-- Lenke til Tailwind CSS (for rask styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lenke til ditt eget CSS-stilsark -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-900 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="text-center mb-6">
+        <h1 class="text-5xl text-white">Cube World</h1>
+        <p class="text-xl text-gray-400">Versjon med dynamiske interaksjoner</p>
+    </div>
+
+    <!-- Kontrollpanel -->
+    <div id="controls" class="mb-8 p-4 bg-gray-800 rounded-xl shadow-lg flex flex-wrap gap-4 justify-center">
+        <h2 class="w-full text-center text-2xl text-white mb-2">Legg til en karakter:</h2>
+        <button onclick="addCube('Stickman')" class="button bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-lg">Stickman (Gitarist)</button>
+        <button onclick="addCube('Dash')" class="button bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg text-lg">Dash (Gamer)</button>
+        <button onclick="addCube('Ton')" class="button bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-lg">Ton (Sover)</button>
+        <button onclick="addCube('Handy')" class="button bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded-lg text-lg">Handy (Trommis)</button>
+        <button onclick="removeAllCubes()" class="button bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg text-lg w-full mt-2">Fjern alle</button>
+    </div>
+
+    <!-- Beholder for kubene -->
+    <div id="world" class="flex flex-wrap justify-center gap-4">
+        <!-- Kuber blir lagt til her av JavaScript -->
+    </div>
+
+    <!-- Lenke til din JavaScript-fil -->
+    <!-- 'defer' sørger for at skriptet kjøres etter at HTML-en er lastet -->
+    <script src="script.js" defer></script>
+</body>
+</html>
