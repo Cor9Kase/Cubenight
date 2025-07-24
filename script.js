@@ -22,10 +22,10 @@ class Cube {
         this.animationFrame = Math.floor(Math.random() * 100);
 
         const personalities = {
-            'Stickman': { speed: 0.7, power: 5, role: 'guitar' },
-            'Dash': { speed: 1.2, power: 4, role: 'gamer' },
-            'Ton': { speed: 0.5, power: 8, role: 'sleeper' },
-            'Handy': { speed: 0.8, power: 6, role: 'drums' }
+            'Stickman': { speed: 0.7, power: 5, role: 'guitar', friendliness: 7 },
+            'Dash': { speed: 1.2, power: 4, role: 'gamer', friendliness: 5 },
+            'Ton': { speed: 0.5, power: 8, role: 'sleeper', friendliness: 3 },
+            'Handy': { speed: 0.8, power: 6, role: 'drums', friendliness: 6 }
         };
         this.personality = personalities[this.characterType];
         
@@ -63,7 +63,7 @@ class Cube {
         if (this.timer > 0) {
             this.timer--;
             if (this.timer <= 0) {
-                if(['meeting', 'victory', 'defeat', 'band_practice', 'chilling'].includes(this.state)) {
+                if(['meeting', 'victory', 'defeat', 'band_practice', 'chilling', 'dancing', 'trading'].includes(this.state)) {
                     this.vx *= -1;
                 }
                 this.setState('walking');
@@ -71,9 +71,13 @@ class Cube {
             return;
         }
 
-        if (this.state === 'walking') {
+        if (['walking','exploring','jumping'].includes(this.state)) {
             this.x += this.vx;
             this.checkForInteractions();
+        }
+
+        if (['walking','exploring'].includes(this.state) && Math.random() < 0.002) {
+            this.setState('jumping', 40);
         }
     }
 
@@ -85,14 +89,14 @@ class Cube {
     checkForInteractions() {
         const rightNeighbor = cubes[this.index + 1];
         if (this.vx > 0 && this.x > CUBE_SIZE - BORDER_ZONE && rightNeighbor) {
-            if (rightNeighbor.x < BORDER_ZONE && rightNeighbor.state === 'walking') {
+            if (rightNeighbor.x < BORDER_ZONE && ['walking','exploring','jumping'].includes(rightNeighbor.state)) {
                 this.initiateMeeting(rightNeighbor);
                 return;
             }
         }
         const leftNeighbor = cubes[this.index - 1];
         if (this.vx < 0 && this.x < BORDER_ZONE && leftNeighbor) {
-            if (leftNeighbor.x > CUBE_SIZE - BORDER_ZONE && leftNeighbor.state === 'walking') {
+            if (leftNeighbor.x > CUBE_SIZE - BORDER_ZONE && ['walking','exploring','jumping'].includes(leftNeighbor.state)) {
                 this.initiateMeeting(leftNeighbor);
                 return;
             }
@@ -108,6 +112,10 @@ class Cube {
     
     initiateMeeting(partner) {
         const possibleMeetings = ['fight', 'chilling']; // De kan alltid slåss eller chille
+        if (myRole !== 'sleeper' && partnerRole !== 'sleeper') {
+            possibleMeetings.push('dance');
+        }
+        possibleMeetings.push('trade');
         const myRole = this.personality.role;
         const partnerRole = partner.personality.role;
 
@@ -131,6 +139,14 @@ class Cube {
                 this.setState('chilling', 300);
                 partner.setState('chilling', 300);
                 break;
+            case 'dance':
+                this.setState('dancing', 250);
+                partner.setState('dancing', 250);
+                break;
+            case 'trade':
+                this.setState('trading', 180);
+                partner.setState('trading', 180);
+                break;
         }
     }
 
@@ -151,7 +167,7 @@ class Cube {
     }
 
     startRandomSoloActivity() {
-        const soloStates = ['idle', 'working', 'sleeping', 'gaming'];
+        const soloStates = ['idle', 'working', 'sleeping', 'gaming', 'dancing', 'exploring'];
         let randomState = soloStates[Math.floor(Math.random() * soloStates.length)];
         
         if (randomState === 'gaming' && this.personality.role !== 'gamer') randomState = 'idle';
@@ -183,6 +199,10 @@ class Cube {
             case 'gaming': this.drawGaming(); break;
             case 'band_practice': this.drawBandPractice(); break;
             case 'chilling': this.drawChilling(); break;
+            case 'dancing': this.drawDancing(); break;
+            case 'trading': this.drawTrading(); break;
+            case 'exploring': this.drawExploring(); break;
+            case 'jumping': this.drawJumping(); break;
         }
         this.ctx.restore();
     }
@@ -247,6 +267,28 @@ class Cube {
             this.ctx.beginPath(); this.ctx.rect(30, -25, 2, 20); this.ctx.stroke();
             this.ctx.beginPath(); this.ctx.arc(31, -25, 10, Math.PI, Math.PI * 2); this.ctx.stroke();
         }
+    }
+
+    drawDancing() {
+        const c = Math.sin(this.animationFrame * 0.5);
+        this.drawStickman({ headY: c * 2, arm1: {angle: Math.PI/2 + c, len: 15}, arm2: {angle: -Math.PI/2 - c, len: 15}, leg1Angle: c, leg2Angle: -c });
+    }
+
+    drawTrading() {
+        const c = Math.sin(this.animationFrame * 0.3);
+        this.drawStickman({ arm1: {angle: 0.3 + c * 0.1, len: 15}, arm2: {angle: -0.3 - c * 0.1, len: 15}, leg1Angle: 0.2, leg2Angle: -0.2 });
+    }
+
+    drawExploring() {
+        const c = Math.sin(this.animationFrame * 0.2);
+        this.drawStickman({ headY: Math.sin(this.animationFrame * 0.05) * 2, leg1Angle: c, leg2Angle: -c });
+    }
+
+    drawJumping() {
+        const j = Math.abs(Math.sin(this.animationFrame * 0.3)) * 20;
+        this.ctx.translate(0, -j);
+        const c = Math.sin(this.animationFrame * 0.2);
+        this.drawStickman({ leg1Angle: c, leg2Angle: -c });
     }
 
     drawWorking() {
