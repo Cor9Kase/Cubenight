@@ -1,1 +1,32 @@
 
+/* Generell styling for siden */
+body {
+    font-family: 'VT323', monospace;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+/* Styling for selve kube-boksen */
+.cube-case {
+    background-color: #f0f0f0;
+    border: 10px solid #d1d1d1;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Styling for LCD-skjermen */
+.screen {
+    background-color: #9bbc0f; /* Klassisk LCD grønn */
+    border: 5px solid #306230;
+    image-rendering: pixelated; /* Sørger for skarpe piksler */
+}
+
+/* Styling for knapper */
+.button {
+    transition: all 0.1s ease-in-out;
+    box-shadow: 0 4px #999;
+}
+
+.button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px #666;
+}
