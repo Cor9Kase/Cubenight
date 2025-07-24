@@ -4,4 +4,4 @@ Dette prosjektet er et lite Cube World-inspirert samlespill hvor du kan legge ti
 
 Den nyeste versjonen introduserer lagring av verden i nettleseren, slik at samlingen din bevares mellom besøk. I tillegg er en ny karakter, **Wizard**, tilgjengelig med egen animasjon for magi.
 
-Prosjektet har beveget seg forbi prototype-stadiet og er nå et sjarmerende lite samlerobjekt du kan bygge videre på.
+Prosjektet har beveget seg forbi prototype-stadiet og er nå et sjarmerende lite samlerobjekt du kan bygge videre på. Den siste oppdateringen gir figurene unike farger og små hodeplagg som tilfører mer personlighet til hver karakter.
