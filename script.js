@@ -25,7 +25,8 @@ class Cube {
             'Stickman': { speed: 0.7, power: 5, role: 'guitar', friendliness: 7 },
             'Dash': { speed: 1.2, power: 4, role: 'gamer', friendliness: 5 },
             'Ton': { speed: 0.5, power: 8, role: 'sleeper', friendliness: 3 },
-            'Handy': { speed: 0.8, power: 6, role: 'drums', friendliness: 6 }
+            'Handy': { speed: 0.8, power: 6, role: 'drums', friendliness: 6 },
+            'Wizard': { speed: 0.6, power: 7, role: 'wizard', friendliness: 8 }
         };
         this.personality = personalities[this.characterType];
         
@@ -111,13 +112,13 @@ class Cube {
     }
     
     initiateMeeting(partner) {
+        const myRole = this.personality.role;
+        const partnerRole = partner.personality.role;
         const possibleMeetings = ['fight', 'chilling']; // De kan alltid slåss eller chille
         if (myRole !== 'sleeper' && partnerRole !== 'sleeper') {
             possibleMeetings.push('dance');
         }
         possibleMeetings.push('trade');
-        const myRole = this.personality.role;
-        const partnerRole = partner.personality.role;
 
         // Sjekk om de kan spille i band
         if ((myRole === 'guitar' && partnerRole === 'drums') || (myRole === 'drums' && partnerRole === 'guitar')) {
@@ -167,12 +168,13 @@ class Cube {
     }
 
     startRandomSoloActivity() {
-        const soloStates = ['idle', 'working', 'sleeping', 'gaming', 'dancing', 'exploring'];
+        const soloStates = ['idle', 'working', 'sleeping', 'gaming', 'dancing', 'exploring', 'casting'];
         let randomState = soloStates[Math.floor(Math.random() * soloStates.length)];
         
         if (randomState === 'gaming' && this.personality.role !== 'gamer') randomState = 'idle';
         if (randomState === 'sleeping' && this.personality.role !== 'sleeper') randomState = 'idle';
         if (randomState === 'working' && !['Ton', 'Handy', 'Stickman'].includes(this.characterType)) randomState = 'idle';
+        if (randomState === 'casting' && this.personality.role !== 'wizard') randomState = 'idle';
 
         this.setState(randomState, 240);
     }
@@ -203,6 +205,7 @@ class Cube {
             case 'trading': this.drawTrading(); break;
             case 'exploring': this.drawExploring(); break;
             case 'jumping': this.drawJumping(); break;
+            case 'casting': this.drawCasting(); break;
         }
         this.ctx.restore();
     }
@@ -291,6 +294,14 @@ class Cube {
         this.drawStickman({ leg1Angle: c, leg2Angle: -c });
     }
 
+    drawCasting() {
+        const c = Math.sin(this.animationFrame * 0.3);
+        this.drawStickman({ arm1: {angle: -0.4, len: 15}, arm2: {angle: 0.4, len: 15} });
+        this.ctx.beginPath();
+        this.ctx.arc(0, -50 + c * 5, 5, 0, Math.PI * 2);
+        this.ctx.stroke();
+    }
+
     drawWorking() {
         const c = Math.sin(this.animationFrame * 0.15);
         switch(this.characterType) {
@@ -314,7 +325,27 @@ function removeAllCubes() {
     cubes = [];
 }
 
+function saveWorld() {
+    const data = cubes.map(c => c.characterType);
+    localStorage.setItem('cubenightWorld', JSON.stringify(data));
+}
+
+function loadWorld() {
+    const data = localStorage.getItem('cubenightWorld');
+    if (!data) return false;
+    try {
+        const types = JSON.parse(data);
+        removeAllCubes();
+        types.forEach(t => addCube(t));
+        return true;
+    } catch (e) {
+        console.error('Failed to load world', e);
+        return false;
+    }
+}
+
 // --- Initialisering ---
-// Starter med et par kuber for å vise funksjonalitet
-addCube('Stickman');
-addCube('Handy');
+if (!loadWorld()) {
+    addCube('Stickman');
+    addCube('Handy');
+}
