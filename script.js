@@ -2,7 +2,13 @@
 const world = document.getElementById('world');
 let cubes = [];
 const CUBE_SIZE = 200;
-const STICKMAN_COLOR = '#0f380f';
+const STICKMAN_COLORS = {
+    'Stickman': '#0f380f',
+    'Dash': '#1d4ed8',
+    'Ton': '#b91c1c',
+    'Handy': '#92400e',
+    'Wizard': '#5b21b6'
+};
 const BORDER_ZONE = 20;
 
 // --- Hovedklassen for en kube ---
@@ -186,7 +192,7 @@ class Cube {
         this.ctx.translate(this.x, this.y);
         this.ctx.scale(this.vx > 0 ? 1 : -1, 1);
         
-        this.ctx.strokeStyle = STICKMAN_COLOR;
+        this.ctx.strokeStyle = STICKMAN_COLORS[this.characterType] || '#0f380f';
         this.ctx.lineWidth = 5;
         this.ctx.lineCap = 'round';
 
@@ -207,6 +213,7 @@ class Cube {
             case 'jumping': this.drawJumping(); break;
             case 'casting': this.drawCasting(); break;
         }
+        this.drawExtras();
         this.ctx.restore();
     }
 
@@ -218,6 +225,42 @@ class Cube {
         ctx.beginPath(); ctx.moveTo(0, -22); ctx.lineTo(p.arm1.len * Math.cos(p.arm1.angle), -22 + p.arm1.len * Math.sin(p.arm1.angle)); ctx.stroke(); // Arm 1
         if(p.arm2) { ctx.beginPath(); ctx.moveTo(0, -22); ctx.lineTo(p.arm2.len * Math.cos(p.arm2.angle), -22 + p.arm2.len * Math.sin(p.arm2.angle)); ctx.stroke(); } // Arm 2
         ctx.beginPath(); ctx.moveTo(0, -10); ctx.lineTo(12 * Math.cos(p.leg1Angle), -10 + 12 * Math.sin(p.leg1Angle)); ctx.moveTo(0, -10); ctx.lineTo(12 * Math.cos(p.leg2Angle), -10 + 12 * Math.sin(p.leg2Angle)); ctx.stroke(); // Bein
+    }
+
+    drawExtras() {
+        switch(this.characterType) {
+            case 'Wizard':
+                this.ctx.beginPath();
+                this.ctx.moveTo(-5, -43);
+                this.ctx.lineTo(0, -60);
+                this.ctx.lineTo(5, -43);
+                this.ctx.closePath();
+                this.ctx.stroke();
+                break;
+            case 'Dash':
+                this.ctx.beginPath();
+                this.ctx.arc(0, -35, 12, Math.PI * 0.25, Math.PI * 0.75);
+                this.ctx.stroke();
+                break;
+            case 'Handy':
+                this.ctx.beginPath();
+                this.ctx.rect(-10, -45, 20, 5);
+                this.ctx.stroke();
+                break;
+            case 'Ton':
+                this.ctx.beginPath();
+                this.ctx.moveTo(-8, -40);
+                this.ctx.lineTo(8, -40);
+                this.ctx.lineTo(0, -48);
+                this.ctx.closePath();
+                this.ctx.stroke();
+                break;
+            case 'Stickman':
+                this.ctx.beginPath();
+                this.ctx.rect(-8, -41, 16, 3);
+                this.ctx.stroke();
+                break;
+        }
     }
 
     drawWalking() { const c = Math.sin(this.animationFrame * 0.2); this.drawStickman({ leg1Angle: c, leg2Angle: -c }); }
