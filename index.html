@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cube World Prototype - Dynamiske Interaksjoner</title>
+    <title>Cube World Samleobjekt</title>
     
     <!-- Lenke til eksternt skriftstilsark -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Lenke til ditt eget CSS-stilsark -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-900 flex flex-col items-center justify-center min-h-screen p-4">
 
@@ -30,7 +30,10 @@
         <button onclick="addCube('Dash')" class="button bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg text-lg">Dash (Gamer)</button>
         <button onclick="addCube('Ton')" class="button bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-lg">Ton (Sover)</button>
         <button onclick="addCube('Handy')" class="button bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded-lg text-lg">Handy (Trommis)</button>
+        <button onclick="addCube('Wizard')" class="button bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-lg text-lg">Wizard (Trollmann)</button>
         <button onclick="removeAllCubes()" class="button bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg text-lg w-full mt-2">Fjern alle</button>
+        <button onclick="saveWorld()" class="button bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg text-lg w-full">Lagre</button>
+        <button onclick="loadWorld()" class="button bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-lg text-lg w-full">Last inn</button>
     </div>
 
     <!-- Beholder for kubene -->
